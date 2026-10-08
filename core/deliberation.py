@@ -3,6 +3,7 @@ import random
 
 from agents.base import BANNED, SYSTEM_TEMPLATE, _extract, _match_option
 from core.debug import dbg
+from core.session import context_block
 from core.voting import decide
 
 _state = {"i": None}
@@ -85,7 +86,7 @@ Rispondi SOLO con JSON valido, senza altro testo:
 """
 
 
-async def _challenge(advocate, prompt, options, round1, leading):
+async def _challenge(advocate, prompt, options, round1, leading, history=None):
 
     label = next(o["label"] for o in options if o["id"] == leading)
 
@@ -94,8 +95,11 @@ async def _challenge(advocate, prompt, options, round1, leading):
         role=advocate.role.strip()
     )
 
+    context = context_block(history)
+
     user = (
-        f"RICHIESTA ORIGINALE\n{prompt}\n\n"
+        (f"{context}\n\n" if context else "")
+        + f"RICHIESTA ORIGINALE\n{prompt}\n\n"
         f"OPZIONE IN TESTA DOPO IL ROUND 1: {leading}) {label}\n\n"
         "VOTI DEL ROUND 1\n"
         + "\n".join(_line(r) for r in round1)
@@ -114,11 +118,19 @@ async def _challenge(advocate, prompt, options, round1, leading):
     return None
 
 
-async def _revise(agent, prompt, options, own, round1, objection, advocate_name):
+async def _revise(
+    agent, prompt, options, own, round1, objection, advocate_name, history=None
+):
 
     peers = [r for r in round1 if r["agent"] != agent.name]
 
-    parts = [
+    parts = []
+
+    context = context_block(history)
+    if context:
+        parts.append(context)
+
+    parts += [
         f"RICHIESTA ORIGINALE\n{prompt}",
         "ROUND 1 — IL TUO VOTO\n"
         + (_line(own) if own else "nessun voto valido"),
@@ -187,7 +199,8 @@ async def deliberate(
     options,
     round1,
     status_callback=None,
-    event_callback=None
+    event_callback=None,
+    history=None
 ):
     """Round 2. Restituisce (risultati_finali, info_extra)."""
 
@@ -205,7 +218,7 @@ async def deliberate(
     _emit(status_callback, advocate.name, "ANALYZING")
 
     objection = await _challenge(
-        advocate, prompt, options, round1, leading
+        advocate, prompt, options, round1, leading, history
     )
 
     if objection:
@@ -227,7 +240,7 @@ async def deliberate(
         try:
             r2 = await _revise(
                 agent, prompt, options, own, round1,
-                objection, advocate.name
+                objection, advocate.name, history
             )
         except Exception as e:
             dbg("[DELIBERATION] errore:", agent.name, e)

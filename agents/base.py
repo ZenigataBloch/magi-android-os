@@ -2,6 +2,7 @@ import json
 import re
 
 from config import DEBUG
+from core.session import context_block
 
 BANNED = ("non disponibil", "trend di mercato")
 
@@ -85,7 +86,7 @@ class Agent:
             "valid": False,
         }
 
-    async def think(self, prompt, options=None):
+    async def think(self, prompt, options=None, history=None):
 
         if options:
             lista = "\n".join(
@@ -104,12 +105,18 @@ class Agent:
             choice_format=choice_format
         )
 
+        # sessione in corso: i turni precedenti vengono prima della richiesta
+        context = context_block(history)
+        user_prompt = (
+            f"{context}\n\nNUOVA RICHIESTA\n{prompt}" if context else prompt
+        )
+
         last_error = "risposta non valida"
 
         for attempt in range(2):
             try:
                 result = await self.provider.ask(
-                    self.role, system_prompt, prompt
+                    self.role, system_prompt, user_prompt
                 )
 
                 if DEBUG:

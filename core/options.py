@@ -2,6 +2,7 @@ import re
 
 from agents.base import _extract
 from core.debug import dbg
+from core.session import context_block
 from providers.groq import GroqProvider
 
 LETTERS = "ABCDE"
@@ -13,6 +14,10 @@ REGOLE
 - Se è una domanda sì/no (es. "devo comprare X?"), le opzioni sono "SI" e "NO".
 - Se è una domanda aperta senza opzioni, proponi 3 candidati plausibili e concreti.
 - Da 2 a 5 opzioni, etichette brevi (1-4 parole), nella lingua della richiesta.
+- Se è presente una CONVERSAZIONE FINORA, il NUOVO MESSAGGIO la continua: ricava
+  le opzioni dalla nuova richiesta tenendo conto del contesto. Non riproporre
+  ciò che l'utente ha scartato o che non può fare (per esempio un ingrediente
+  che non ha).
 
 Rispondi SOLO con JSON valido:
 {"options": ["...", "..."], "generated": false}
@@ -69,14 +74,17 @@ def _heuristic(prompt):
     return None
 
 
-async def extract_options(prompt):
+async def extract_options(prompt, history=None):
     """Restituisce {"options": [{"id": "A", "label": "..."}], "generated": bool}."""
+
+    context = context_block(history)
+    message = f"{context}\n\nNUOVO MESSAGGIO\n{prompt}" if context else prompt
 
     try:
         raw = await GroqProvider().ask(
             "Estrattore di opzioni",
             EXTRACT_PROMPT,
-            prompt
+            message
         )
         data = _extract(raw)
         built = _build(

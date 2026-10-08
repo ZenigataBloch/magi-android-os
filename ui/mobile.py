@@ -11,6 +11,9 @@ from kivy.metrics import dp
 from kivy.properties import ListProperty, NumericProperty, StringProperty
 from kivy.utils import platform
 
+from kivy.properties import BooleanProperty, ListProperty, NumericProperty, StringProperty
+from core.session import make_turn
+
 import os
 from kivy import kivy_data_dir
 from kivy.utils import escape_markup
@@ -75,6 +78,8 @@ KV = """
     font_name: "HelveticaNeueCondensed"
 
 <NervButton@Button>:
+    background_disabled_normal: ""
+    disabled_color: 1, 0.416, 0, 0.35
     background_normal: ""
     background_down: ""
     background_color: (1, 0.416, 0, 0.35) if self.state == "down" else (1, 0.416, 0, 0.10)
@@ -88,6 +93,8 @@ KV = """
             width: 1
 
 <NervInput@TextInput>:
+    background_disabled_normal: ""
+    disabled_foreground_color: 1, 0.75, 0.3, 0.35
     background_normal: ""
     background_active: ""
     background_color: 0.02, 0.014, 0, 1
@@ -176,9 +183,10 @@ FloatLayout:
                     on_release: app.open_memory()
 
                 NervButton:
-                    text: "消去"
+                    text: "新規"
                     font_name: "NotoSerifJP"
                     font_size: sp(12)
+                    disabled: app.busy
                     on_release: app.clear_session()
 
         # ---- mappa ----
@@ -309,13 +317,15 @@ FloatLayout:
 
             NervInput:
                 id: prompt
-                hint_text: "Inserisci richiesta MAGI..."
+                hint_text: app.input_hint
+                disabled: app.busy
                 on_text_validate: app.analyze(self.text)
 
             NervButton:
                 text: "ANALYZE"
                 size_hint_x: None
                 width: dp(98)
+                disabled: app.busy
                 on_release: app.analyze(prompt.text)
 """
 
@@ -378,6 +388,8 @@ class MAGIMobile(App):
     nerv_log = StringProperty("")
 
     mono_font = StringProperty("Roboto")
+    busy = BooleanProperty(False)
+    input_hint = StringProperty("Inserisci richiesta MAGI...")
     
     def add_nerv_log(self, line):
         self.nerv_log = (self.nerv_log + "\n" + line) if self.nerv_log else line
@@ -416,7 +428,8 @@ class MAGIMobile(App):
  
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.log_lines = []
+        self.session = []
+        self.log_lines = [] 
         self.busy = False
         self._answered = set()
         self._boot = None
@@ -602,6 +615,11 @@ class MAGIMobile(App):
         responses = result.get("responses", [])
         decision = result.get("decision", {})
 
+        # la decisione entra nella memoria della sessione
+        if any(r.get("valid", True) for r in responses):
+            self.session.append(make_turn(result))
+            self.input_hint = "Continua la conversazione..."
+
         try:
             save_decision(
                 result.get("prompt", ""),
@@ -684,6 +702,9 @@ class MAGIMobile(App):
         if self.busy:
             return
 
+        self.session = []
+        self.input_hint = "Inserisci richiesta MAGI..."
+
         self.result = ""
         self.nerv_log = ""
 
@@ -714,63 +735,64 @@ class MAGIMobile(App):
         popup.open()
 
     def analyze(self, prompt):
+        prompt = prompt.strip()
 
-            prompt = prompt.strip()
+        if self.busy or not prompt:
+            return
 
-            if self.busy:
-                return
+        self.busy = True
 
-            self.add_nerv_log("[SYSTEM] Inserisci una richiesta")
+        magi_map = self.root.ids.magi_map
+        history = list(self.session)  # copia: il thread lavora su questa
+        turn = len(history) + 1
 
-            self.busy = True
-            
-            self.nerv_log = ""; self.add_nerv_log("[SYSTEM] MAGI ANALYZING...")
-            self.root.ids.vote_box.clear_widgets()
+        # tastiera giù e campo svuotato: la richiesta è già in `prompt`
+        self.root.ids.prompt.focus = False
+        self.root.ids.prompt.text = ""
 
-            # svuota il campo: la richiesta e' gia' stata copiata in `prompt`
-            self.root.ids.prompt.text = ""           
+        # in una sessione il log continua; a sessione nuova riparte da zero
+        if not history:
+            self.nerv_log = ""
+        self.add_nerv_log(f"[SYSTEM] SESSION TURN {turn} · MAGI ANALYZING...")
+        self.root.ids.vote_box.clear_widgets()
 
-            # azzera gli indicatori
-            self._answered = set()
-            self.sync_value = 0
-            self.sync_text = "SYNCHRONIZATION RATE: 0%"
-            self.consensus_value = 0
-            self.consensus_text = "ANALYZING..."
-            self.final_text = "ANALYZING..."
-            self.final_sub = "PLEASE WAIT"
-            self.final_color = GREEN
-            self.start_sync_animation()
+        # azzera gli indicatori
+        self._answered = set()
+        self.sync_value = 0
+        self.sync_text = "SYNCHRONIZATION RATE: 0%"
+        self.consensus_value = 0
+        self.consensus_text = "ANALYZING..."
+        self.final_text = "ANALYZING..."
+        self.final_sub = "PLEASE WAIT"
+        self.final_color = GREEN
+        self.start_sync_animation()
 
-            magi_map = self.root.ids.magi_map
-            magi_map.reset()
+        magi_map.reset()
 
-            def worker():
-             
-                agents = create_magi_agents()
+        def worker():
+            agents = create_magi_agents()
 
-                def status_update(name, status):
-                    Clock.schedule_once(
-                        lambda dt: magi_map.set_status(name.upper(), status)
-                    )
+            def status_update(name, status):
+                Clock.schedule_once(lambda dt: self._on_status(name, status))
 
-                def on_event(kind, payload):
-                    Clock.schedule_once(
-                        lambda dt: self.handle_event(kind, payload)
-                    )
+            def on_event(kind, payload):
+                Clock.schedule_once(lambda dt: self.handle_event(kind, payload))
 
-                try:
-                    result = asyncio.run(
+            try:
+                result = asyncio.run(
                     run_magi(
                         prompt,
                         agents,
                         status_callback=status_update,
-                        event_callback=on_event
+                        event_callback=on_event,
+                        history=history,
                     )
                 )
-                except Exception as e:
-                    Clock.schedule_once(lambda dt: self.show_error(str(e)))
-                    return
+            except Exception as e:
+                message = str(e)
+                Clock.schedule_once(lambda dt: self.show_error(message))
+                return
 
-                Clock.schedule_once(lambda dt: self.show_result(result))
+            Clock.schedule_once(lambda dt: self.show_result(result))
 
-            threading.Thread(target=worker, daemon=True).start()
+        threading.Thread(target=worker, daemon=True).start()

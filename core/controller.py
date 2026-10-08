@@ -19,13 +19,15 @@ async def run_magi(
     prompt,
     agents,
     status_callback=None,
-    event_callback=None
+    event_callback=None,
+    history=None
 ):
+    """history: turni precedenti della sessione (vedi core/session.py)."""
 
     dbg("[SYSTEM] MAGI Round 1: Independent Analysis")
 
     # opzioni strutturate
-    opts = await extract_options(prompt)
+    opts = await extract_options(prompt, history)
     options = opts["options"]
     _emit(event_callback, "options", opts)
 
@@ -36,7 +38,7 @@ async def run_magi(
         await asyncio.sleep(1)
 
         try:
-            result = await agent.think(prompt, options)
+            result = await agent.think(prompt, options, history)
         except Exception as e:
             result = agent._error(str(e))
 
@@ -70,7 +72,8 @@ async def run_magi(
             options,
             results,
             status_callback,
-            event_callback
+            event_callback,
+            history
         )
 
     decision = decide(final_results, options=options)
