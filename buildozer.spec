@@ -5,7 +5,7 @@ package.name = magios
 package.domain = org.magi
 
 source.dir = .
-source.include_exts = py,ttf,otf,env,png,kv
+source.include_exts = py,ttf,otf,env,png,kv,txt
 source.exclude_dirs = bin,tests,venv,__pycache__
 source.exclude_patterns = fonts/NotoSerifJP-Bold.otf,subset.py
 
