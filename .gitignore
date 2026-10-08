@@ -1,0 +1,9 @@
+keys.env
+venv/
+__pycache__/
+*.pyc
+.buildozer/
+bin/
+data/
+crash.log
+fonts/NotoSerifJP-Bold.otf
