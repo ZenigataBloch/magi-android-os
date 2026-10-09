@@ -193,10 +193,16 @@ def _patch_dotenv():
         base = os.path.dirname(os.path.abspath(__file__))
 
         def find_dotenv(*args, **kwargs):
-            for name in ("keys.env", ".env"):
-                path = os.path.join(base, name)
-                if os.path.exists(path):
-                    return path
+            # prima la cartella dell'app (APK compilato sul Mint con le chiavi),
+            # poi quelle dove le puoi mettere a mano (APK compilato su GitHub)
+            folders = (base, os.environ.get("ANDROID_PRIVATE"), _external_dir())
+            for folder in folders:
+                if not folder:
+                    continue
+                for name in ("keys.env", ".env"):
+                    path = os.path.join(folder, name)
+                    if os.path.exists(path):
+                        return path
             return ""
 
         dotenv.main.find_dotenv = find_dotenv
