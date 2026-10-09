@@ -27,7 +27,7 @@ jobs:
         with:
           python-version: "3.11"
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "17"
@@ -52,11 +52,16 @@ jobs:
           KS: ${{ secrets.DEBUG_KEYSTORE_B64 }}
         run: |
           mkdir -p ~/.android
-          if [ -n "$KS" ]; then
-            echo "$KS" | base64 -d > ~/.android/debug.keystore
-          else
+          if [ -z "$KS" ]; then
             echo "DEBUG_KEYSTORE_B64 assente: firma con una chiave nuova"
+            exit 0
           fi
+          if ! printf '%s' "$KS" | tr -d '[:space:]' | base64 -d > ~/.android/debug.keystore; then
+            echo "::error::DEBUG_KEYSTORE_B64 non e' base64 valido: rigenera il secret"
+            exit 1
+          fi
+          keytool -list -keystore ~/.android/debug.keystore -storepass android > /dev/null \
+            || { echo "::error::keystore non valido o con password diversa da 'android'"; exit 1; }
 
       - name: Installa Buildozer
         run: pip install buildozer cython
