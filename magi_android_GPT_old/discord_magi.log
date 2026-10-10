@@ -1,0 +1,96 @@
+Traceback (most recent call last):
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\magi_silent.pyw", line 11, in <module>
+    runpy.run_path(os.path.join(base, "discord_magi.py"), run_name="__main__")
+  File "<frozen runpy>", line 291, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\discord_magi.py", line 43, in <module>
+    from core.magi import create_magi_agents
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\core\magi.py", line 1, in <module>
+    from providers.gemini import GeminiProvider
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\providers\gemini.py", line 3, in <module>
+    from google import genai
+ImportError: cannot import name 'genai' from 'google' (unknown location)
+Traceback (most recent call last):
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\magi_silent.pyw", line 11, in <module>
+    runpy.run_path(os.path.join(base, "discord_magi.py"), run_name="__main__")
+  File "<frozen runpy>", line 291, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\discord_magi.py", line 43, in <module>
+    from core.magi import create_magi_agents
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\core\magi.py", line 1, in <module>
+    from providers.gemini import GeminiProvider
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\providers\gemini.py", line 3, in <module>
+    from google import genai
+ImportError: cannot import name 'genai' from 'google' (unknown location)
+Traceback (most recent call last):
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\magi_silent.pyw", line 11, in <module>
+    runpy.run_path(os.path.join(base, "discord_magi.py"), run_name="__main__")
+  File "<frozen runpy>", line 291, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\discord_magi.py", line 43, in <module>
+    from core.magi import create_magi_agents
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\core\magi.py", line 1, in <module>
+    from providers.gemini import GeminiProvider
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\providers\gemini.py", line 3, in <module>
+    from google import genai
+ImportError: cannot import name 'genai' from 'google' (unknown location)
+10:16:28 [INFO] Avvio del bot MAGI-OS in corso...
+10:16:29 [INFO] Comandi sincronizzati (globali): magi, storico
+10:16:31 [INFO] MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)
+10:16:58 [INFO] Richiesta: Claymore o Berserk?
+10:17:06 [INFO] Verdetto: APPROVED (2-1) su: Claymore o Berserk?
+10:19:05 [INFO] Avvio del bot MAGI-OS in corso...
+10:19:06 [INFO] Comandi sincronizzati (globali): magi, storico
+10:19:08 [INFO] MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)
+14:06:26 [INFO] Richiesta: Are raccoons stinky
+14:07:19 [INFO] Verdetto: APPROVED (2-1) su: Are raccoons stinky
+16:52:50 [INFO] Richiesta: Apple juice, pineapple juice or orange juice?
+16:54:59 [WARNING] MELCHIOR offline: Core non disponibile: risposta di ripiego
+16:54:59 [INFO] Verdetto: DEADLOCK (1-1) su: Apple juice, pineapple juice or orange juice?
+16:55:30 [INFO] Richiesta: Which juice is better between apple, pineapple and orange juice?
+16:56:41 [INFO] Verdetto: DEADLOCK (1-1-1) su: Which juice is better between apple, pineapple and orange juice?
+Traceback (most recent call last):
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\magi_silent.pyw", line 11, in <module>
+    runpy.run_path(os.path.join(base, "discord_magi.py"), run_name="__main__")
+  File "<frozen runpy>", line 290, in run_path
+  File "<frozen runpy>", line 259, in _get_code_from_file
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\discord_magi.py", line 470
+    )
+    ^
+SyntaxError: unmatched ')'
+Traceback (most recent call last):
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\magi_silent.pyw", line 11, in <module>
+    runpy.run_path(os.path.join(base, "discord_magi.py"), run_name="__main__")
+  File "<frozen runpy>", line 290, in run_path
+  File "<frozen runpy>", line 259, in _get_code_from_file
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\discord_magi.py", line 470
+    )
+    ^
+SyntaxError: unmatched ')'
+17:24:20 [INFO] Avvio del bot MAGI-OS in corso...
+17:24:21 [INFO] Comandi sincronizzati (globali): magi, storico
+17:24:23 [INFO] MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)
+17:24:38 [INFO] Richiesta: Which juice is better between apple, pineapple and orange juice?
+17:25:13 [INFO] Verdetto: DEADLOCK (1-1-1) su: Which juice is better between apple, pineapple and orange juice?
+09:38:06 [INFO] Avvio del bot MAGI-OS in corso...
+09:38:07 [INFO] Comandi sincronizzati (globali): magi, storico
+09:38:09 [INFO] MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)
+10:12:04 [INFO] Richiesta: What breed of cat is the best?
+10:12:17 [INFO] Verdetto: APPROVED (3) su: What breed of cat is the best?
+10:13:23 [INFO] Richiesta: qual è il miglior topping per pizza
+10:13:38 [INFO] Verdetto: APPROVED (3) su: qual è il miglior topping per pizza
+10:14:44 [INFO] Richiesta: miglior personaggio della trilogia di Final Fantasy XIII
+10:14:51 [INFO] Verdetto: APPROVED (2-1) su: miglior personaggio della trilogia di Final Fantasy XIII
+11:09:00 [INFO] Richiesta: l'acqua è bagnata?
+11:09:08 [INFO] Verdetto: APPROVED (2-1) su: l'acqua è bagnata?
+12:44:13 [INFO] Avvio del bot MAGI-OS in corso...
+12:44:14 [INFO] Comandi sincronizzati (globali): magi, storico
+12:44:17 [INFO] MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)
+12:44:32 [INFO] Richiesta: I gatti sono segretamente agenti del caos?
+12:44:52 [INFO] Verdetto: DENIED (2-1) su: I gatti sono segretamente agenti del caos?
+16:07:23 [INFO] Avvio del bot MAGI-OS in corso...
+16:07:23 [INFO] Comandi sincronizzati (globali): magi, storico
+16:07:26 [INFO] MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)

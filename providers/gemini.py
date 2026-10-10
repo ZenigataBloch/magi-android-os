@@ -1,51 +1,48 @@
 import os
 
-from dotenv import load_dotenv
-
-from providers._http import post_json
-
 try:
+    from dotenv import load_dotenv
     load_dotenv()
 except Exception:
     # su Android le chiavi le carica già main.py
     pass
 
-MODEL = "gemini-3.1-flash-lite"
-URL = (
-    "https://generativelanguage.googleapis.com/v1beta/models/"
-    f"{MODEL}:generateContent"
-)
+import config
+from providers._http import post_json
+from providers.chain import FallbackProvider
+from providers.openai_compat import nvidia
+
+BASE = "https://generativelanguage.googleapis.com/v1beta/models/"
 
 
-class GeminiProvider:
+class _GeminiRaw:
 
-    async def ask(
-        self,
-        model,
-        system,
-        prompt
-    ):
+    name = "gemini"
 
+    @property
+    def label(self):
+        return f"gemini:{config.GEMINI_MODEL}"
+
+    async def ask(self, role, system, prompt):
         try:
-
             api_key = os.getenv("GEMINI_API_KEY")
 
             if not api_key:
-                raise RuntimeError("GEMINI_API_KEY mancante nel file .env")
+                raise RuntimeError("GEMINI_API_KEY mancante")
 
             # la chiave va nell'header, non nell'URL: così non compare
             # mai nei messaggi di errore
             data = await post_json(
-                URL,
+                f"{BASE}{config.GEMINI_MODEL}:generateContent",
                 {
                     "x-goog-api-key": api_key,
                     "Content-Type": "application/json",
                 },
                 {
                     "system_instruction": {"parts": [{"text": system}]},
-                    "contents": [
-                        {"role": "user", "parts": [{"text": prompt}]}
-                    ],
+                    "contents": [{"role": "user", "parts": [{"text": prompt}]}],
+                    # niente temperature: per Gemini 3 si lascia il default
+                    "generationConfig": {"responseMimeType": "application/json"},
                 },
             )
 
@@ -57,16 +54,22 @@ class GeminiProvider:
                 )
 
             parts = candidates[0].get("content", {}).get("parts", [])
-
-            return "".join(
+            text = "".join(
                 p.get("text", "") for p in parts if not p.get("thought")
             )
 
-        except Exception as e:
+            if not text.strip():
+                reason = candidates[0].get("finishReason", "?")
+                raise RuntimeError(f"testo vuoto (finishReason={reason})")
 
-            return {
-                "choice": "UNKNOWN",
-                "confidence": 0.0,
-                "reasoning":
-                    f"MELCHIOR OFFLINE: {str(e)}"
-            }
+            return text
+
+        except Exception as e:
+            raise RuntimeError(f"{self.label}: {e}") from None
+
+
+class GeminiProvider(FallbackProvider):
+    """Melchior (e estrattore di opzioni): Gemini, poi NVIDIA se c'è la chiave."""
+
+    def __init__(self):
+        super().__init__(_GeminiRaw(), nvidia(config.NVIDIA_MODEL))

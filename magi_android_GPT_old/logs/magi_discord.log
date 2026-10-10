@@ -1,0 +1,160 @@
+2026-10-07 09:29:58,340 [CRITICAL] magi.discord: Eccezione non gestita
+Traceback (most recent call last):
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\discord_magi.py", line 291, in <module>
+    @app_commands.allowed_contexts(guilds=True, dm_channels=True, private_channels=True)
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: allowed_contexts() got an unexpected keyword argument 'dm_channels'
+2026-10-07 09:30:12,923 [CRITICAL] magi.discord: Eccezione non gestita
+Traceback (most recent call last):
+  File "C:\Users\aless\Documents\Bots\MAGI-OS\discord_magi.py", line 291, in <module>
+    @app_commands.allowed_contexts(guilds=True, dm_channels=True, private_channels=True)
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: allowed_contexts() got an unexpected keyword argument 'dm_channels'
+[2026-10-07 09:31:40] [INFO    ] discord.client: logging in using static token
+[2026-10-07 09:31:41] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 4dddc2f1854f0de2f7e8fda4820e2f24).
+[2026-10-07 09:31:43] [INFO    ] magi.discord: Online come MAGI System#1593
+[2026-10-07 09:33:12] [INFO    ] magi.discord: Richiesta: Pizza or pasta
+[2026-10-07 09:33:19] [INFO    ] magi.discord: Verdetto: APPROVED (2-1) su: Pizza or pasta
+[2026-10-07 09:36:28] [INFO    ] discord.client: logging in using static token
+[2026-10-07 09:36:29] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 2448399f51064845ecc57fd022ef9bb8).
+[2026-10-07 09:36:31] [INFO    ] magi.discord: Online come MAGI System#1593
+[2026-10-07 09:37:02] [INFO    ] magi.discord: Richiesta: Devo pubblicare questo messaggio in inglese in un canale Discord? Valuta se la traduzione è fedele all'originale, naturale, con un tono adeguato e senza errori o fraintendimenti rischiosi.
+
+ORIGINALE:
+Pizza o pasta?
+
+TRADUZIONE INGLESE:
+Pizza or pasta?
+
+Rispondi SI per pubblicarla così com'è, NO se…
+[2026-10-07 09:37:27] [INFO    ] magi.discord: Verdetto: APPROVED (3) su: Devo pubblicare questo messaggio in inglese in un canale Discord? Valuta se la traduzione è fedele all'originale, naturale, con un tono adeguato e senza errori o fraintendimenti rischiosi.
+
+ORIGINALE:
+Pizza o pasta?
+
+TRADUZIONE INGLESE:
+Pizza or pasta?
+
+Rispondi SI per pubblicarla così com'è, NO se…
+2026-10-07 09:39:43,002 [INFO] magi.discord: Avvio del bot MAGI-OS in corso...
+[2026-10-07 09:39:43] [INFO    ] discord.client: logging in using static token
+[2026-10-07 09:39:43] [INFO    ] magi.discord: Comandi sincronizzati (globali): magi, inglese, storico, Traduci in inglese (MAGI)
+[2026-10-07 09:39:44] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 00f6ca978f6f852391580e160caeeb09).
+[2026-10-07 09:39:46] [INFO    ] magi.discord: MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)
+[2026-10-07 09:40:04] [INFO    ] magi.discord: Richiesta: Devo pubblicare questo messaggio in inglese in un canale Discord? Valuta se la traduzione è fedele all'originale, naturale, con un tono adeguato e senza errori o fraintendimenti rischiosi.
+
+ORIGINALE:
+Pizza o pasta
+
+TRADUZIONE INGLESE:
+Pizza or pasta
+
+Rispondi SI per pubblicarla così com'è, NO se v…
+[2026-10-07 09:40:28] [INFO    ] magi.discord: Verdetto: APPROVED (2-1) su: Devo pubblicare questo messaggio in inglese in un canale Discord? Valuta se la traduzione è fedele all'originale, naturale, con un tono adeguato e senza errori o fraintendimenti rischiosi.
+
+ORIGINALE:
+Pizza o pasta
+
+TRADUZIONE INGLESE:
+Pizza or pasta
+
+Rispondi SI per pubblicarla così com'è, NO se v…
+2026-10-07 09:43:02,535 [INFO] magi.discord: Avvio del bot MAGI-OS in corso...
+[2026-10-07 09:43:02] [INFO    ] discord.client: logging in using static token
+[2026-10-07 09:43:03] [INFO    ] magi.discord: Comandi sincronizzati (globali): magi, storico
+[2026-10-07 09:43:03] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: bea42e225f16f828e84289b7ed285e23).
+[2026-10-07 09:43:05] [INFO    ] magi.discord: MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)
+[2026-10-07 09:43:22] [INFO    ] magi.discord: Richiesta: Pizza o sushi
+[2026-10-07 09:43:39] [INFO    ] magi.discord: Verdetto: APPROVED (3) su: Pizza o sushi
+[2026-10-07 09:45:09] [INFO    ] magi.discord: Richiesta: Is pan bagnat more affordable than fries in Nice?
+[2026-10-07 09:45:27] [INFO    ] magi.discord: Verdetto: DENIED (2-1) su: Is pan bagnat more affordable than fries in Nice?
+2026-10-07 09:46:08,695 [INFO] magi.discord: Avvio del bot MAGI-OS in corso...
+[2026-10-07 09:46:08] [INFO    ] discord.client: logging in using static token
+[2026-10-07 09:46:09] [INFO    ] magi.discord: Comandi sincronizzati (globali): magi, storico
+[2026-10-07 09:46:09] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 26600d3663539c0b5ac03f2195c9b3af).
+[2026-10-07 09:46:11] [INFO    ] magi.discord: MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)
+2026-10-07 09:52:20,914 [INFO] magi.discord: Avvio del bot MAGI-OS in corso...
+[2026-10-07 09:52:20] [INFO    ] discord.client: logging in using static token
+[2026-10-07 09:52:21] [INFO    ] magi.discord: Comandi sincronizzati (globali): magi, storico
+[2026-10-07 09:52:22] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 09442c4b8a5852a9a46fca6c8e0bc14d).
+[2026-10-07 09:52:24] [INFO    ] magi.discord: MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)
+[2026-10-07 09:55:19] [INFO    ] magi.discord: Richiesta: Can I live rent free in Nice?
+[2026-10-07 09:55:59] [INFO    ] magi.discord: Verdetto: DENIED (2-1) su: Can I live rent free in Nice?
+2026-10-07 10:16:28,530 [INFO] magi.discord: Avvio del bot MAGI-OS in corso...
+[2026-10-07 10:16:28] [INFO    ] discord.client: logging in using static token
+[2026-10-07 10:16:29] [INFO    ] magi.discord: Comandi sincronizzati (globali): magi, storico
+[2026-10-07 10:16:29] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 49ff87f26158df82c2d45265f587e7af).
+[2026-10-07 10:16:31] [INFO    ] magi.discord: MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)
+[2026-10-07 10:16:58] [INFO    ] magi.discord: Richiesta: Claymore o Berserk?
+[2026-10-07 10:17:06] [INFO    ] magi.discord: Verdetto: APPROVED (2-1) su: Claymore o Berserk?
+2026-10-07 10:19:05,475 [INFO] magi.discord: Avvio del bot MAGI-OS in corso...
+[2026-10-07 10:19:05] [INFO    ] discord.client: logging in using static token
+[2026-10-07 10:19:06] [INFO    ] magi.discord: Comandi sincronizzati (globali): magi, storico
+[2026-10-07 10:19:06] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 804196f5620f4cf2fb1b9acf99f682a2).
+[2026-10-07 10:19:08] [INFO    ] magi.discord: MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)
+[2026-10-07 11:18:56] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 804196f5620f4cf2fb1b9acf99f682a2.
+[2026-10-07 11:51:00] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 804196f5620f4cf2fb1b9acf99f682a2.
+[2026-10-07 11:59:34] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 804196f5620f4cf2fb1b9acf99f682a2.
+[2026-10-07 12:18:26] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 804196f5620f4cf2fb1b9acf99f682a2.
+[2026-10-07 13:24:26] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 804196f5620f4cf2fb1b9acf99f682a2.
+[2026-10-07 14:03:01] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 804196f5620f4cf2fb1b9acf99f682a2.
+[2026-10-07 14:06:26] [INFO    ] magi.discord: Richiesta: Are raccoons stinky
+[2026-10-07 14:07:19] [INFO    ] magi.discord: Verdetto: APPROVED (2-1) su: Are raccoons stinky
+[2026-10-07 16:52:50] [INFO    ] magi.discord: Richiesta: Apple juice, pineapple juice or orange juice?
+[2026-10-07 16:54:59] [WARNING ] magi.discord: MELCHIOR offline: Core non disponibile: risposta di ripiego
+[2026-10-07 16:54:59] [INFO    ] magi.discord: Verdetto: DEADLOCK (1-1) su: Apple juice, pineapple juice or orange juice?
+[2026-10-07 16:55:30] [INFO    ] magi.discord: Richiesta: Which juice is better between apple, pineapple and orange juice?
+[2026-10-07 16:56:41] [INFO    ] magi.discord: Verdetto: DEADLOCK (1-1-1) su: Which juice is better between apple, pineapple and orange juice?
+[2026-10-07 17:15:34] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 804196f5620f4cf2fb1b9acf99f682a2.
+2026-10-07 17:24:20,209 [INFO] magi.discord: Avvio del bot MAGI-OS in corso...
+[2026-10-07 17:24:20] [INFO    ] discord.client: logging in using static token
+[2026-10-07 17:24:21] [INFO    ] magi.discord: Comandi sincronizzati (globali): magi, storico
+[2026-10-07 17:24:21] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 1e5b2a450dbabb005a323baaeb3d2baa).
+[2026-10-07 17:24:23] [INFO    ] magi.discord: MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)
+[2026-10-07 17:24:38] [INFO    ] magi.discord: Richiesta: Which juice is better between apple, pineapple and orange juice?
+[2026-10-07 17:25:13] [INFO    ] magi.discord: Verdetto: DEADLOCK (1-1-1) su: Which juice is better between apple, pineapple and orange juice?
+[2026-10-07 18:42:39] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 1e5b2a450dbabb005a323baaeb3d2baa.
+[2026-10-07 19:44:43] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 1e5b2a450dbabb005a323baaeb3d2baa.
+[2026-10-07 20:21:40] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 1e5b2a450dbabb005a323baaeb3d2baa.
+[2026-10-07 22:26:49] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 1e5b2a450dbabb005a323baaeb3d2baa.
+2026-10-08 09:38:06,135 [INFO] magi.discord: Avvio del bot MAGI-OS in corso...
+[2026-10-08 09:38:06] [INFO    ] discord.client: logging in using static token
+[2026-10-08 09:38:07] [INFO    ] magi.discord: Comandi sincronizzati (globali): magi, storico
+[2026-10-08 09:38:07] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: a535cd3f1185956b213ab50ac176269c).
+[2026-10-08 09:38:09] [INFO    ] magi.discord: MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)
+[2026-10-08 10:10:24] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session a535cd3f1185956b213ab50ac176269c.
+[2026-10-08 10:12:04] [INFO    ] magi.discord: Richiesta: What breed of cat is the best?
+[2026-10-08 10:12:17] [INFO    ] magi.discord: Verdetto: APPROVED (3) su: What breed of cat is the best?
+[2026-10-08 10:13:23] [INFO    ] magi.discord: Richiesta: qual è il miglior topping per pizza
+[2026-10-08 10:13:38] [INFO    ] magi.discord: Verdetto: APPROVED (3) su: qual è il miglior topping per pizza
+[2026-10-08 10:14:44] [INFO    ] magi.discord: Richiesta: miglior personaggio della trilogia di Final Fantasy XIII
+[2026-10-08 10:14:51] [INFO    ] magi.discord: Verdetto: APPROVED (2-1) su: miglior personaggio della trilogia di Final Fantasy XIII
+[2026-10-08 11:09:00] [INFO    ] magi.discord: Richiesta: l'acqua è bagnata?
+[2026-10-08 11:09:08] [INFO    ] magi.discord: Verdetto: APPROVED (2-1) su: l'acqua è bagnata?
+[2026-10-08 11:10:48] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session a535cd3f1185956b213ab50ac176269c.
+[2026-10-08 12:09:52] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session a535cd3f1185956b213ab50ac176269c.
+[2026-10-08 13:51:09] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session a535cd3f1185956b213ab50ac176269c.
+[2026-10-08 17:43:04] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session a535cd3f1185956b213ab50ac176269c.
+[2026-10-08 18:30:28] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session a535cd3f1185956b213ab50ac176269c.
+[2026-10-08 20:03:58] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session a535cd3f1185956b213ab50ac176269c.
+[2026-10-08 20:33:49] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session a535cd3f1185956b213ab50ac176269c.
+[2026-10-08 22:05:49] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session a535cd3f1185956b213ab50ac176269c.
+[2026-10-09 01:11:01] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session a535cd3f1185956b213ab50ac176269c.
+2026-10-09 12:44:13,986 [INFO] magi.discord: Avvio del bot MAGI-OS in corso...
+[2026-10-09 12:44:13] [INFO    ] discord.client: logging in using static token
+[2026-10-09 12:44:14] [INFO    ] magi.discord: Comandi sincronizzati (globali): magi, storico
+[2026-10-09 12:44:15] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 21266ec0e5e97ada5d23032d975aabe5).
+[2026-10-09 12:44:17] [INFO    ] magi.discord: MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)
+[2026-10-09 12:44:32] [INFO    ] magi.discord: Richiesta: I gatti sono segretamente agenti del caos?
+[2026-10-09 12:44:52] [INFO    ] magi.discord: Verdetto: DENIED (2-1) su: I gatti sono segretamente agenti del caos?
+[2026-10-09 15:04:55] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 21266ec0e5e97ada5d23032d975aabe5.
+2026-10-09 16:07:23,084 [INFO] magi.discord: Avvio del bot MAGI-OS in corso...
+[2026-10-09 16:07:23] [INFO    ] discord.client: logging in using static token
+[2026-10-09 16:07:23] [INFO    ] magi.discord: Comandi sincronizzati (globali): magi, storico
+[2026-10-09 16:07:24] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 5c0fbf2ec1f0d7bf1a6307304a20933b).
+[2026-10-09 16:07:26] [INFO    ] magi.discord: MAGI-OS avviato: online come MAGI System#1593 (id 1557290633285210142)
+[2026-10-09 16:37:01] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 5c0fbf2ec1f0d7bf1a6307304a20933b.
+[2026-10-09 16:52:25] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 5c0fbf2ec1f0d7bf1a6307304a20933b.
+[2026-10-09 20:40:55] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 5c0fbf2ec1f0d7bf1a6307304a20933b.
+[2026-10-09 21:07:41] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 5c0fbf2ec1f0d7bf1a6307304a20933b.
+[2026-10-10 00:03:28] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 5c0fbf2ec1f0d7bf1a6307304a20933b.

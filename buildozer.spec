@@ -7,8 +7,7 @@ package.domain = org.magi
 source.dir = .
 source.include_exts = py,ttf,otf,env,png,kv,txt
 source.exclude_dirs = bin,tests,venv,__pycache__
-source.exclude_patterns = fonts/NotoSerifJP-Bold.otf,subset.py
-
+source.exclude_patterns = fonts/NotoSerifJP-Bold.otf,subset.py,ui/gui.py,ui/boot.py,ui/fonts.py,ui/magi_map.py,ui/nerv.py,discord_magi.py,run_desktop.py
 version = 0.1
 
 requirements = python3,kivy,https://github.com/kivymd/KivyMD/archive/master.zip,materialyoucolor,exceptiongroup,asyncgui,asynckivy,pillow,requests,certifi,urllib3,idna,charset-normalizer,python-dotenv

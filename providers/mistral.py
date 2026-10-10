@@ -1,49 +1,14 @@
-import os
-
-from providers._http import openai_chat
-
-MISTRAL_URL = "https://api.mistral.ai/v1/chat/completions"
-GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
+import config
+from providers.chain import FallbackProvider
+from providers.openai_compat import groq, mistral, nvidia
 
 
-class MistralProvider:
+class MistralProvider(FallbackProvider):
+    """Casper: Mistral, poi NVIDIA (se c'è la chiave), poi Qwen su Groq."""
 
-    async def ask(
-        self,
-        model,
-        system,
-        prompt
-    ):
-
-        # Prima prova: Mistral
-        try:
-
-            return await openai_chat(
-                MISTRAL_URL,
-                os.getenv("MISTRAL_API_KEY"),
-                "mistral-small-latest",
-                system,
-                prompt,
-            )
-
-        except Exception:
-
-            # FALLBACK CASPER
-            try:
-
-                return await openai_chat(
-                    GROQ_URL,
-                    os.getenv("GROQ_API_KEY"),
-                    "qwen/qwen3.8-27b",
-                    system,
-                    prompt,
-                )
-
-            except Exception as e:
-
-                return {
-                    "decision": "ABSTAIN",
-                    "confidence": 0.0,
-                    "reasoning":
-                        f"CASPER OFFLINE: {e}"
-                }
+    def __init__(self):
+        super().__init__(
+            mistral(config.MISTRAL_MODEL),
+            nvidia(config.NVIDIA_MODEL),
+            groq(config.GROQ_FALLBACK_MODEL),
+        )

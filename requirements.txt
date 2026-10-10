@@ -1,0 +1,6 @@
+rich
+pyyaml
+python-dotenv
+google-genai
+groq
+mistralai

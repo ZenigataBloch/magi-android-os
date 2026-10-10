@@ -1,7 +1,13 @@
 import asyncio
 import random
 
-from agents.base import BANNED, SYSTEM_TEMPLATE, _extract, _match_option
+from agents.base import (
+    BANNED,
+    SYSTEM_TEMPLATE,
+    _extract,
+    _match_option,
+    normalize_confidence,
+)
 from core.debug import dbg
 from core.session import context_block
 from core.voting import decide
@@ -179,9 +185,7 @@ async def _revise(
                 "agent": agent.name,
                 "choice": oid,
                 "label": next(o["label"] for o in options if o["id"] == oid),
-                "confidence": max(
-                    0.0, min(100.0, float(data.get("confidence", 0)))
-                ),
+                "confidence": normalize_confidence(data.get("confidence", 0)),
                 "reasoning": reasoning,
                 "valid": True,
                 "round": 2,

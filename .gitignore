@@ -7,3 +7,9 @@ bin/
 data/
 crash.log
 fonts/NotoSerifJP-Bold.otf
+
+.env
+.venv/
+*.log
+logs/
+data/

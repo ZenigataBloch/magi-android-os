@@ -2,9 +2,17 @@ import json
 import re
 
 from config import DEBUG
-from core.session import context_block
 
-BANNED = ("non disponibil", "trend di mercato")
+# Frasi che indicano una risposta di ripiego / dati inventati.
+# Volutamente specifiche: "il prodotto non è disponibile in Italia" è un
+# ragionamento legittimo e non deve essere scartato.
+BANNED = (
+    "dati non disponibil",
+    "dati non sono disponibil",
+    "informazioni non disponibil",
+    "informazioni non sono disponibil",
+    "trend di mercato",
+)
 
 SYSTEM_TEMPLATE = """Sei {name}, uno dei tre nuclei decisionali del sistema MAGI di NERV.
 
@@ -17,6 +25,8 @@ REGOLE
   2-3 criteri e scegli l'opzione che li soddisfa meglio.
 - Se mancano informazioni, assumi l'ipotesi più ragionevole, dichiarala in
   mezza frase e decidi comunque.
+- Se due opzioni sono quasi equivalenti, scegli comunque e dillo con una
+  confidenza bassa (50-60): non fingere certezza.
 - Non citare dati, statistiche o trend che non ti sono stati forniti.
   Non scrivere mai che i dati non sono disponibili.
 - Non giudicare se la richiesta sia valida o permessa.
@@ -24,20 +34,38 @@ REGOLE
   guardano il problema da angoli diversi.
 {options_block}
 FORMATO
-- "choice": {choice_format}
-- "confidence": intero da 0 a 100. 50 = indeciso, 90+ solo se la scelta è netta.
 - "reasoning": 2-4 frasi in italiano, concrete e riferite alla richiesta.
+  Scrivilo PER PRIMO: individua i criteri, confronta le opzioni, poi concludi.
+- "choice": {choice_format} Deve coincidere con la conclusione del reasoning.
+- "confidence": intero da 0 a 100, calibrato. 50 = indeciso, 60-75 = vantaggio
+  modesto, 85+ solo se la scelta è netta e senza controindicazioni serie.
 
-Rispondi SOLO con JSON valido, senza altro testo:
-{{"choice": "...", "confidence": 0, "reasoning": "..."}}
+Rispondi SOLO con JSON valido, con le chiavi in questo ordine:
+{{"reasoning": "...", "choice": "...", "confidence": 0}}
 """
+
+
+def normalize_confidence(value):
+    """Porta la confidenza a 0-100 (accetta anche 0-1)."""
+    try:
+        c = float(value)
+    except (TypeError, ValueError):
+        return 0.0
+    if 0 < c <= 1:
+        c *= 100
+    return max(0.0, min(100.0, c))
 
 
 def _extract(result):
     if isinstance(result, dict):
         return result
 
-    text = re.sub(r"```(?:json)?", "", str(result))
+    text = str(result)
+
+    # i modelli "thinking" possono includere il ragionamento tra tag
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.S | re.I)
+    text = re.sub(r"```(?:json)?", "", text)
+
     start, end = text.find("{"), text.rfind("}")
 
     if start == -1 or end == -1:
@@ -52,16 +80,25 @@ def _extract(result):
 
 
 def _match_option(choice, options):
-    """Accetta 'A', 'A)', 'a' oppure il testo esatto dell'opzione."""
-    c = str(choice).strip().upper().rstrip(").:")
+    """Accetta 'A', 'A)', 'a', 'A) testo' oppure il testo esatto dell'opzione."""
+    raw = str(choice).strip()
+    c = raw.upper().rstrip(").:")
 
     for o in options:
         if c == o["id"]:
             return o["id"]
 
     for o in options:
-        if str(choice).strip().upper() == o["label"].strip().upper():
+        if raw.upper() == o["label"].strip().upper():
             return o["id"]
+
+    # "A) Roma" / "B: Milano": serve il delimitatore, così un'opzione come
+    # "A CASA" non viene scambiata per la lettera A
+    m = re.match(r"^([A-Z])\s*[\).:\-]", raw.upper())
+    if m:
+        for o in options:
+            if m.group(1) == o["id"]:
+                return o["id"]
 
     return None
 
@@ -86,7 +123,7 @@ class Agent:
             "valid": False,
         }
 
-    async def think(self, prompt, options=None, history=None):
+    async def think(self, prompt, options=None):
 
         if options:
             lista = "\n".join(
@@ -105,18 +142,13 @@ class Agent:
             choice_format=choice_format
         )
 
-        # sessione in corso: i turni precedenti vengono prima della richiesta
-        context = context_block(history)
-        user_prompt = (
-            f"{context}\n\nNUOVA RICHIESTA\n{prompt}" if context else prompt
-        )
-
         last_error = "risposta non valida"
+        hint = ""
 
         for attempt in range(2):
             try:
                 result = await self.provider.ask(
-                    self.role, system_prompt, user_prompt
+                    self.role, system_prompt, prompt + hint
                 )
 
                 if DEBUG:
@@ -127,10 +159,7 @@ class Agent:
 
                 choice = str(data.get("choice", "")).strip().upper()
                 reasoning = str(data.get("reasoning", "")).strip()
-                confidence = max(
-                    0.0,
-                    min(100.0, float(data.get("confidence", 0)))
-                )
+                confidence = normalize_confidence(data.get("confidence", 0))
 
                 bad = (
                     not choice
@@ -140,6 +169,11 @@ class Agent:
 
                 if bad:
                     last_error = "risposta di ripiego"
+                    hint = (
+                        "\n\n[NOTA DI SISTEMA] La risposta precedente è stata "
+                        "scartata (scelta vuota o dati citati come non "
+                        "disponibili). Scegli comunque, con il JSON richiesto."
+                    )
                     continue
 
                 label = choice
@@ -149,6 +183,11 @@ class Agent:
 
                     if not oid:
                         last_error = f"opzione non valida: {choice}"
+                        hint = (
+                            "\n\n[NOTA DI SISTEMA] La scelta precedente non era "
+                            "una delle opzioni. In \"choice\" scrivi SOLO l'ID "
+                            "(una lettera tra quelle elencate)."
+                        )
                         continue
 
                     choice = oid
@@ -163,9 +202,11 @@ class Agent:
                     "confidence": confidence,
                     "reasoning": reasoning,
                     "valid": True,
+                    "via": getattr(self.provider, "last_used", None),
                 }
 
             except Exception as e:
                 last_error = str(e)
+                hint = ""  # errore del provider o JSON rotto: stesso prompt
 
         return self._error(last_error)

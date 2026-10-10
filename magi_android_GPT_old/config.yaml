@@ -1,0 +1,17 @@
+system:
+  name: MAGI-OS
+  version: "0.1"
+
+agents:
+
+  melchior:
+    model: gemini
+    role: logic
+
+  balthasar:
+    model: groq
+    role: human
+
+  casper:
+    model: openrouter
+    role: critic

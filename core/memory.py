@@ -8,7 +8,7 @@ def _base_dir():
     # su Android si usa la cartella privata dell'app, che resta tra un avvio
     # e l'altro; altrove la cartella corrente, come prima
     private = os.environ.get("ANDROID_PRIVATE")
-    return Path(private) if private else Path(".")
+    return Path(private) if private else Path(__file__).resolve().parent.parent
 
 
 MEMORY_DIR = _base_dir() / "data"
@@ -124,8 +124,15 @@ def save_decision(
     }
 
 
+    # tollerante: accetta anche l'intero risultato di run_magi (dict)
+    if isinstance(responses, dict):
+        responses = responses.get("responses", [])
+
     if responses:
         for response in responses:
+
+            if not isinstance(response, dict):
+                continue
 
             name = response.get(
                 "agent",

@@ -3,7 +3,7 @@ import re
 from agents.base import _extract
 from core.debug import dbg
 from core.session import context_block
-from providers.groq import GroqProvider
+from providers.gemini import GeminiProvider
 
 LETTERS = "ABCDE"
 
@@ -81,7 +81,7 @@ async def extract_options(prompt, history=None):
     message = f"{context}\n\nNUOVO MESSAGGIO\n{prompt}" if context else prompt
 
     try:
-        raw = await GroqProvider().ask(
+        raw = await GeminiProvider().ask(
             "Estrattore di opzioni",
             EXTRACT_PROMPT,
             message
