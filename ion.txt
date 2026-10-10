@@ -63,9 +63,6 @@ jobs:
           keytool -list -keystore ~/.android/debug.keystore -storepass android > /dev/null \
             || { echo "::error::keystore non valido o con password diversa da 'android'"; exit 1; }
 
-      - name: Numero di build (l'app lo legge per sapere se esiste un APK piu' recente)
-        run: echo "${{ github.run_number }}" > build_id.txt
-
       - name: Installa Buildozer
         run: pip install buildozer cython
 
@@ -76,6 +73,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: apk-latest
-          name: APK build ${{ github.run_number }}
+          name: APK più recente
           body: "APK di debug compilato da GitHub Actions, senza chiavi API. Vedi il README per inserirle."
           files: bin/*.apk

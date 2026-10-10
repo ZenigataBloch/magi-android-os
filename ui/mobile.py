@@ -13,6 +13,7 @@ from kivy.utils import platform
 
 from kivy.properties import BooleanProperty, ListProperty, NumericProperty, StringProperty
 from core.session import make_turn
+from core import updates
 
 import os
 from kivy import kivy_data_dir
@@ -155,7 +156,7 @@ FloatLayout:
                     size_hint_y: 0.4
 
                 Label:
-                    text: "FILE:MAGI_SYS\\nEX_MODE:ON\\nPRIORITY:AAA"
+                    text: "FILE:MAGI_SYS\\nEX_MODE:ON\\nPRIORITY:AAA  " + app.build_info
                     font_size: sp(8)
                     color: 1, 0.416, 0, 0.85
                     halign: "left"
@@ -188,6 +189,17 @@ FloatLayout:
                     font_size: sp(12)
                     disabled: app.busy
                     on_release: app.clear_session()
+
+        # ---- avviso aggiornamenti (nascosto se non c'e' nulla) ----
+        NervButton:
+            id: update_btn
+            text: app.update_text
+            font_size: sp(10)
+            size_hint_y: None
+            height: dp(34) if app.update_text else 0
+            opacity: 1 if app.update_text else 0
+            disabled: not app.update_text
+            on_release: app.on_update_tap()
 
         # ---- mappa ----
         MagiMapKivy:
@@ -390,6 +402,8 @@ class MAGIMobile(App):
     mono_font = StringProperty("Roboto")
     busy = BooleanProperty(False)
     input_hint = StringProperty("Inserisci richiesta MAGI...")
+    build_info = StringProperty("")
+    update_text = StringProperty("")
     
     def add_nerv_log(self, line):
         self.nerv_log = (self.nerv_log + "\n" + line) if self.nerv_log else line
@@ -434,6 +448,9 @@ class MAGIMobile(App):
         self._answered = set()
         self._boot = None
         self._inset_tries = 0
+        self._update_kind = None
+        self._update_url = None
+        self._update_tries = 0
 
     def build(self):
         self.title = "MAGI-OS | NERV Decision Support System"
@@ -453,6 +470,12 @@ class MAGIMobile(App):
 
     def on_start(self):
         self.system_code = get_next_code()
+
+        try:
+            self.build_info = updates.build_info()
+        except Exception as e:
+            dbg("BUILD INFO ERROR:", e)
+        Clock.schedule_once(self._update_check, 8)
         self._refresh_insets()
 
         # la schermata di avvio sta sopra l'interfaccia e si toglie da sola
@@ -488,6 +511,56 @@ class MAGIMobile(App):
             "CASPER",
             "ONLINE"
         )
+
+    # ---------- aggiornamenti ----------
+
+    def _update_check(self, *_):
+        def work():
+            try:
+                res = updates.check()
+            except Exception as e:
+                dbg("UPDATE CHECK ERROR:", e)
+                return
+            Clock.schedule_once(lambda dt: self._apply_update(res))
+
+        threading.Thread(target=work, daemon=True).start()
+
+    def _apply_update(self, res):
+        apk, ota = res.get("apk"), res.get("ota")
+        self._update_kind = None
+        self._update_url = None
+
+        if apk:
+            build, url = apk
+            self._update_kind, self._update_url = "apk", url
+            self.update_text = f"NUOVO APK #{build} - TOCCA PER SCARICARE"
+            self.add_nerv_log(f"[SYSTEM] NUOVO APK DISPONIBILE (build {build})")
+
+        elif ota and ota[0] == "ready":
+            self._update_kind = "ota"
+            self.update_text = f"AGGIORNAMENTO v{ota[1]} PRONTO - RIAPRI L'APP"
+            self.add_nerv_log(
+                f"[SYSTEM] AGGIORNAMENTO v{ota[1]} SCARICATO: "
+                "chiudi l'app dai recenti e riaprila"
+            )
+
+        elif ota and ota[0] == "downloading":
+            self.update_text = f"AGGIORNAMENTO v{ota[1]} IN DOWNLOAD..."
+            # il download parte in background: ricontrolla qualche volta
+            if self._update_tries < 3:
+                self._update_tries += 1
+                Clock.schedule_once(self._update_check, 30)
+
+        else:
+            self.update_text = ""
+
+    def on_update_tap(self):
+        if self._update_kind == "apk" and self._update_url:
+            updates.open_url(self._update_url)
+        elif self._update_kind == "ota":
+            self.add_nerv_log(
+                "[SYSTEM] Chiudi l'app dai recenti e riaprila per attivare l'aggiornamento"
+            )
 
     def on_pause(self):
         # evita che Android chiuda l'app mentre i core stanno rispondendo
